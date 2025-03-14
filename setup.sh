@@ -4,7 +4,7 @@ env_file=".env"
 secrets_env_file=".env_encoded"
 
 # Set credentials_file to point to your GCP service account key file
-credentials_file=~/.gcp/green-calling-444717-c7-e5913373d028.json
+credentials_file=~/.gcp/gcp_keys.json
 
 # Setup credentials data
 echo "SECRET_GCP_SERVICE_ACCOUNT=$(<"${credentials_file}" base64 -w 0)" > "${secrets_env_file}"
