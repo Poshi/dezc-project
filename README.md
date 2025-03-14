@@ -7,6 +7,8 @@ For this project I chose an official dataset that contains the people involved
 in hate crimes and discrimination in the region.
 
 The data can be found at [the official government page](https://analisi.transparenciacatalunya.cat/Seguretat/V-ctimes-o-persones-autores-de-delictes-d-odi-i-di/gci6-2ubm) and is updated yearly.
+Currently, it contains data for 2021->2023.
+Unfortunately, 2024 data is still missing.
 
 The problem we want to solve is being able to see where this kind of
 crimes are happening, which are the trends on criminality and which
@@ -68,9 +70,10 @@ They have been partitioned and clustered according to the
 posterior queries.
 
 The partition have been done by date, as we usually are interested
-in the data in a time span.
-The clustering have been done by city, as this is a common sorting
-request.
+in the data in a time span and this is also a proper way of distribute
+the records evenly thru the different partitions.
+The clustering have been done by city, as this is a common filtering
+and sorting request.
 
 >Transformations (dbt, spark, etc)
 >0 points: No tranformations
@@ -79,6 +82,9 @@ request.
 
 DBT have been used to transform the data in an easier to use,
 better distilled, dataset for easy visualization in the dashboard.
+The transformations include tyding up transformations, because some fields
+are not normalized, and aggregations, for quick representation in the
+dashboard.
 
 >Dashboard
 >0 points: No dashboard
