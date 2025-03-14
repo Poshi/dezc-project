@@ -6,13 +6,10 @@ description: |
   Data comes from the following API endpoint:
   https://analisi.transparenciacatalunya.cat/Seguretat/V-ctimes-o-persones-autores-de-delictes-d-odi-i-di/gci6-2ubm
 
-inputs:
-  - id: year
-    type: INT
-
 variables:
+  year               : "{{trigger.date ?? execution.startDate | date('yyyy')}}"
   table_basename     : "crims"
-  file_basename      : "{{vars.table_basename}}-{{inputs.year}}"
+  file_basename      : "{{vars.table_basename}}-{{render(vars.year)}}"
   api_file           : "{{vars.file_basename}}.csv"
   gcs_file           : "gs://{{envs.gcp_bucket_name}}/{{vars.api_file}}"
   external_table_name: "{{envs.gcp_project_id}}.{{envs.gcp_dataset_name}}.{{vars.file_basename}}_ext"
@@ -23,7 +20,7 @@ tasks:
   - id: set_label
     type: io.kestra.plugin.core.execution.Labels
     labels:
-      year: "{{inputs.year}}"
+      year: "{{render(vars.year)}}"
 
   - id: parallel_main
     type: io.kestra.plugin.core.flow.Parallel
@@ -45,7 +42,7 @@ tasks:
 
               logging.getLogger().setLevel(logging.ERROR)
 
-              year = {{inputs.year}}
+              year = {{render(vars.year)}}
 
               with Socrata("analisi.transparenciacatalunya.cat", None) as client:
                   # All results, returned as JSON from API / converted to Python list of
