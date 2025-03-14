@@ -1,11 +1,11 @@
 variable "credentials" {
   description = "GCP Credentials"
-  default     = "~/.gcp/green-calling-444717-c7-e5913373d028.json"
+  default     = "~/.gcp/gcp_keys.json"
 }
 
 variable "project" {
   description = "Project ID"
-  default     = "green-calling-444717-c7"
+  default     = "molten-smithy-453622-n8"
 }
 
 variable "region" {
