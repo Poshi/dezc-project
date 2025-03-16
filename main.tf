@@ -27,15 +27,3 @@ resource "google_bigquery_dataset" "demo_dataset" {
   dataset_id = var.bq_dataset_name
   location   = var.location
 }
-
-output "project_id" {
-  value = var.project
-}
-
-output "bucket_name" {
-  value = var.gcs_bucket_name
-}
-
-output "dataset_name" {
-  value = var.bq_dataset_name
-}
