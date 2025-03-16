@@ -11,8 +11,9 @@ Currently, it contains data for 2021->2023.
 Unfortunately, 2024 data is still missing.
 
 The problem we want to solve is being able to see where this kind of
-crimes are happening, which are the trends on criminality and which
-is the profile of the victims and the agressors.
+crimes are happening, which are the most common specific crime types,
+which are the trends on criminality and which
+is the age profile of the victims and the agressors.
 
 ## Scoring
 
@@ -72,7 +73,7 @@ posterior queries.
 The partition have been done by date, as we usually are interested
 in the data in a time span and this is also a proper way of distribute
 the records evenly thru the different partitions.
-The clustering have been done by city, as this is a common filtering
+The clustering have been done by crime type, as this is a common filtering
 and sorting request.
 
 >Transformations (dbt, spark, etc)
@@ -92,7 +93,12 @@ dashboard.
 >4 points: A dashboard with 2 tiles
 
 A dashboard with several tiles have been generated to be able to
-navigate the data easily.
+navigate the data easily. There are
+
+* a bar graph showing victims and aggressors by sex
+* a pie graph showing the kinds of crime
+* a pie graph showing the ciries where the crimes habe been commited
+* a line graph showing how the age of the aggressors and the victims have been cha ging over time
 
 >Reproducibility
 >0 points: No instructions how to run the code at all
@@ -101,3 +107,65 @@ navigate the data easily.
 
 Finally, I hope that this document is good enough to run and
 reproduce all the calculus I've been doing here.
+
+## Usage instructions
+
+### Set up
+
+You need to start by forking/cloning the repository.
+You also need to have your GCP crecentials in a file called `~/.gcp/gcp_keys.json`.
+The `jq` utility must be present and available in your `PATH`.
+`terraform`, `docker compose` and `curl` are also required.
+
+Once you have all the previous requisites, you can simply start the setup script:
+
+```
+./setup.sh init
+```
+
+This script will perform several actions automatically:
+
+* extract the project ID from your credentials file and use it to name the resources
+* initialize Terraform and provision the resources
+* generate the obuscated and clear text environment files for Kestra
+* start Kestra
+* upload the flow to Kestra
+
+Unfortunately, I've been unable to launch the backfills automatically,
+so now you will have to go into Kestra at `http://localhost:8080`, click on
+Flows->load_year->Triggers->Backfill executions and start backfill executions
+for years 2021 to 2024.
+
+Up to this point, we will have the data in BigQuery, ready for being processed by DBT.
+
+For DBT, you need to create the DBT project, connect to your forked repository and
+modify `models/staging/schema.yml` to point to the created resources.
+For that, you need to change the lines
+```
+sources:
+  - name: staging
+    database: "{{ env_var('DBT_DATABASE', 'molten-smithy-453622-n8') }}"
+    schema: "{{ env_var('DBT_SCHEMA', 'dezc_project_dataset') }}"
+```
+to your names for `database` and `schema`.
+Once done, run `dbt build`.
+
+The last step is to create the visualization.
+Unfortunately, there is no code I can show you here, as all the configuration have
+been done manually in the graphical interface.
+You can see the final result at https://lookerstudio.google.com/s/je4xd0W-qEA
+
+I'd love to be able to specify the dashboard using code, so I could push it into
+a source control repository, but this is currently not possible.
+
+### Tear down
+
+To remove all the GCP resources generated, just run
+```
+./setup.sh destroy
+```
+
+---
+
+I hope all this is enough for anyone to reproduce my outcome.
+Don't hesitate to ask any questions by opening an issue. I'll be happy to help.
