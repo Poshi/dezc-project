@@ -145,7 +145,7 @@ tasks:
               nombre                    NUMERIC OPTIONS (description = 'Nombre de víctimes de cadascun dels fets relacionats amb l\'odi i la discriminació')
           )
           PARTITION BY data_particio
-          CLUSTER BY municipi;
+          CLUSTER BY ambit_procediment_fet;
 
   - id: bq_merge
     type: io.kestra.plugin.gcp.bigquery.Query
