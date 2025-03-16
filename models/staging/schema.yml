@@ -1,0 +1,141 @@
+version: 2
+
+sources:
+  - name: staging
+    database: "{{ env_var('DBT_DATABASE', 'molten-smithy-453622-n8') }}"
+    schema: "{{ env_var('DBT_SCHEMA', 'dezc_project_dataset') }}"
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: crims
+
+models:
+  - name: crims
+    description: "Víctimes o persones autores de delictes d'odi i discriminació"
+    columns:
+      - name: unique_row_id
+        data_type: string
+        description: "Surrogate primary key"
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: any_
+        data_type: int16
+        description: "Número de l'any de les dades"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: num_mes
+        data_type: int8
+        description: "Número del mes de les dades"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: nom_mes
+        data_type: string
+        description: "Nom del mes de les dades"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: data_particio
+        data_type: date
+        description: "Data proximada per particionar les dades"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: regio_policial_rp
+        data_type: string
+        description: "Nom de la Regió policial on s'han produït els fets"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: area_basica_policial_abp
+        data_type: string
+        description: "Nom de l'Area Basica Policial"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: provincia
+        data_type: string
+        description: "Província on s'han produït els fets"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: comarca
+        data_type: string
+        description: "Comarca on s'han produït els fets"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: municipi
+        data_type: string
+        description: "Municipi on s'han produït els fets"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: tipus_de_lloc_dels_fets
+        data_type: string
+        description: "Tipus del lloc on s'han produït els fets (punt de la via, tipus d'establiment, tipus de local, etc.)"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: tipus_de_fet
+        data_type: string
+        description: "Àmbit penal (delictes) o infraccions administratives"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: tipus_de_fet_codi_penal_o
+        data_type: string
+        description: "Detall del tipus de fet segons el codi penal (2n nivell) ) o les lleis relacionades amb l'odi i la discriminació"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: ambit_procediment_fet
+        data_type: string
+        description: "Motivació que origina el fet o classificació del fet d'odi i discriminació"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: rol_victima_o_autoria
+        data_type: string
+        description: "Víctima o persona autora dels fets relacionats amb odi i discriminació"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: sexe
+        data_type: string
+        description: "Home o dona"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: edat_inici_fets
+        data_type: int8
+        description: "Edat de la víctima o de la persona autora quan es van iniciar els fets"
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: nombre
+        data_type: int8
+        description: "Nombre de víctimes de cadascun dels fets relacionats amb l'odi i la discriminació"
+        tests:
+          - not_null:
+              severity: warn
