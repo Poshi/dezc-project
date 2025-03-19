@@ -65,7 +65,4 @@ done
 curl -X POST http://localhost:8080/api/v1/flows/import -F fileUpload=@load_year.yml
 
 # Launch backfill jobs
-#curl -s -X PUT http://localhost:8080/api/v1/triggers --json '{"flowId": "load_year", "namespace": "dezc", "triggerId": "schedule", "backfill": {"start": "2021-01-01T00:00:00Z", "end": "2021-12-31T00:00:00Z"}}'
-
-# This would be an execution on the current date
-#curl -v -X POST -H 'Content-Type: multipart/form-data' 'http://localhost:8080/api/v1/executions/dezc/load_year'
+curl -s -X PUT http://localhost:8080/api/v1/triggers --json '{"flowId": "load_year", "namespace": "dezc", "triggerId": "schedule", "backfill": {"start": "2021-01-01T00:00:00Z", "end": "'"$(date +%Y)"'-12-31T00:00:00Z"}}'

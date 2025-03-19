@@ -130,13 +130,11 @@ This script will perform several actions automatically:
 * generate the obuscated and clear text environment files for Kestra
 * start Kestra
 * upload the flow to Kestra
-
-Unfortunately, I've been unable to launch the backfills automatically,
-so now you will have to go into Kestra at `http://localhost:8080`, click on
-Flows->load_year->Triggers->Backfill executions and start backfill executions
-for years 2021 to 2024.
+* start backfill runs for the period since the first data record (2021) to the current year.
 
 Up to this point, we will have the data in BigQuery, ready for being processed by DBT.
+But please, make sure everything ran properly, the flow was uploaded, the backfill was
+executed and the data appears in BigQuery.
 
 For DBT, you need to create the DBT project, connect to your forked repository and
 modify `models/staging/schema.yml` to point to the created resources.
@@ -148,6 +146,13 @@ sources:
     schema: "{{ env_var('DBT_SCHEMA', 'dezc_project_dataset') }}"
 ```
 to your names for `database` and `schema`.
+The database is the name of your project.
+It can be found in your GCP credentials file.
+And the schema is constructed as:
+`dezc_dataset_${project//-/_}`
+That is: "dezc_dataset_" followed by the name of the project where all dashes (-)
+have been substituted by underscores (_).
+
 Once done, run `dbt build`.
 
 The last step is to create the visualization.
